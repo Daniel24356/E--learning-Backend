@@ -1,6 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { PrismaClient, GoogleUser } from '@prisma/client';
+import { db } from './db';
 
 const prisma = new PrismaClient();
 passport.use(
@@ -15,16 +16,16 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Check if the user exists
-        // const googleId = profile.id;
+        // const googleId = profile.id;    
 
 
-        let user = await prisma.googleUser.findUnique({
+        let user = await db.googleUser.findUnique({
           where: { googleId: profile.id},
         });
 
         // If not, create a new user
         if (!user) {
-          user = await prisma.googleUser.create({
+          user = await db.googleUser.create({
             data: {
               googleId: profile.id,
               email: profile.emails ? profile.emails[0].value : '',
@@ -49,9 +50,9 @@ passport.serializeUser((user, done) => {
 });
 
 // Deserialize user
-passport.deserializeUser(async (id: number, done) => {
+passport.deserializeUser(async (id: string, done) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id } });
+    const user = await db.googleUser.findUnique({ where: { id } });
     done(null, user);
   } catch (error) {
     done(error, null);

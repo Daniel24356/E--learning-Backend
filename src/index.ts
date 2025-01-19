@@ -34,7 +34,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // app.use("/api/v1/courses", courseRouter)
-// app.use("/api/v1/users", userRouter)
+app.use("/api/v1/users", userRouter)
 app.use("/api/v1/login", authRouter)
 
 app.use(errorHandler)
