@@ -20,21 +20,25 @@ enum USER_ROLE {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
-  email         String    @unique
-  password      String?
-  firstName     String?
-  lastName      String?
-  avatarUrl     String?
-  role          USER_ROLE @default(USER)
-  emailVerified Boolean   @default(false)
-  otp           String?
-  otpExpiry     String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now())
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  password       String?
+  firstName      String?
+  lastName       String?
+  avatarUrl      String?
+  role           USER_ROLE @default(USER)
+  emailVerified  Boolean   @default(false)
+  otp            String?
+  otpExpiry      String?
+  phoneNumber    String?
+  profilePicture String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @default(now())
 
   Enrollment           Enrollment[]
   instructorEnrollment Enrollment[] @relation(name: "instructorEnrollment")
+
+  PasswordHistory PasswordHistory[]
 }
 
 model GoogleUser {
@@ -70,6 +74,14 @@ model Enrollment {
   updatedAt    DateTime         @updatedAt
 
   User User[] @relation(name: "instructorEnrollment")
+}
+
+model PasswordHistory {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  passwordHash String
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
 }
 
 enum Role {

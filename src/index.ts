@@ -5,6 +5,8 @@ import userRouter from "./Route/userRouter";
 import { errorHandler } from "./exceptions/error/errorHandler";
 import courseRouter from "./Route/courseRoute";
 import authRouter from "./Route/authRouth";
+import otpRouter from "./Route/otpRoute";
+import { setupSwagger } from "./configs/swagger";
 
 dotenv.config();
 
@@ -33,9 +35,12 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+setupSwagger(app);
+
 // app.use("/api/v1/courses", courseRouter)
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/login", authRouter)
+app.use("/api/v1/otp", otpRouter)
 
 app.use(errorHandler)
 
