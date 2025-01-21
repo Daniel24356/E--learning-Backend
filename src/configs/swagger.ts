@@ -374,3 +374,4 @@ export const setupSwagger = (app: Express) => {
   // Set up Swagger UI
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 };
+
